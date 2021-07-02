@@ -9,17 +9,35 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showScannerSheet = false
+    @State private var texts:[ScanData] = []
     var body: some View {
         NavigationView{
-            VStack{}
+            VStack{
+                if texts.count>0{
+                    List{
+                        ForEach(texts){text in
+                            NavigationLink(
+                            
+                                destination: ScrollView{Text(text.content)},
+                                label: {
+                                    Text(text.content).lineLimit(1)
+                                })
+                        }
+                    }
+                }
+                else{
+                    Text("No scan yet").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                }
+            }
                 .navigationTitle("Read Image")
                 .navigationBarItems(trailing: Button(action: {
                     self.showScannerSheet = true
                 }, label: {
                     Image(systemName: "doc.text.viewfinder")
+                    font(.title)
                 })
                 .sheet(isPresented: $showScannerSheet, content: {
-                    /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Content@*/Text("Sheet Content")/*@END_MENU_TOKEN@*/
+                    Text("Sheet Content")
                 })
                 )
         }
