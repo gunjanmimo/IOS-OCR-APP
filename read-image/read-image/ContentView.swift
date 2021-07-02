@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  read-image
-//
-//  Created by Gunjan  Paul on 02/07/21.
-//
-
 import SwiftUI
 
 struct ContentView: View {
@@ -13,12 +6,11 @@ struct ContentView: View {
     var body: some View {
         NavigationView{
             VStack{
-                if texts.count>0{
+                if texts.count > 0{
                     List{
                         ForEach(texts){text in
                             NavigationLink(
-                            
-                                destination: ScrollView{Text(text.content)},
+                                destination:ScrollView{Text(text.content)},
                                 label: {
                                     Text(text.content).lineLimit(1)
                                 })
@@ -26,21 +18,31 @@ struct ContentView: View {
                     }
                 }
                 else{
-                    Text("No scan yet").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    Text("No scan yet").font(.title)
                 }
             }
-                .navigationTitle("Read Image")
+                .navigationTitle("Scan OCR")
                 .navigationBarItems(trailing: Button(action: {
                     self.showScannerSheet = true
                 }, label: {
                     Image(systemName: "doc.text.viewfinder")
-                    font(.title)
+                        .font(.title)
                 })
                 .sheet(isPresented: $showScannerSheet, content: {
-                    Text("Sheet Content")
+                    self.makeScannerView()
                 })
                 )
         }
+    }
+    private func makeScannerView()-> ScannerView {
+        ScannerView(completion: {
+            textPerPage in
+            if let outputText = textPerPage?.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines){
+                let newScanData = ScanData(content: outputText)
+                self.texts.append(newScanData)
+            }
+            self.showScannerSheet = false
+        })
     }
 }
 
