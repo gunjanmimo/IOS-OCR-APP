@@ -8,9 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showScannerSheet = false
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        NavigationView{
+            VStack{}
+                .navigationTitle("Read Image")
+                .navigationBarItems(trailing: Button(action: {
+                    self.showScannerSheet = true
+                }, label: {
+                    Image(systemName: "doc.text.viewfinder")
+                })
+                .sheet(isPresented: $showScannerSheet, content: {
+                    /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Content@*/Text("Sheet Content")/*@END_MENU_TOKEN@*/
+                })
+                )
+        }
     }
 }
 
